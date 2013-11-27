@@ -11,7 +11,8 @@
 //#include <opencv\highgui.h>
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
-
+//#include <opencv2\opencv.hpp>
+//C:\Program Files (x86)\Code Laboratories\CL-Eye Platform SDK\Include\opencv2
 using namespace cv;
 using namespace std;
 
@@ -50,6 +51,8 @@ class CLEyeCameraCapture
 	HANDLE _hThread;
 	bool _running;
 	bool _isTracking;
+	bool _isCalibrated;
+	Point squareCorner[4];
 
 public:
 
@@ -68,9 +71,11 @@ public:
 
 	void Run();
 
-	void CircleDetector(Mat& input, Mat& input_gray, vector<Vec3f>& circles, Point& center, int& radius);
+	void trackLaserSpot(Mat& pCapture, int& p_x, int& p_y, int& countPixel, int& grayThreshold);
 
-	Point FixSubImageSize(Point center, int w, int h, int size);
+	Mat warpPerspectiveTransform(Point2f corners[4]);
+
+	void calibrate(char* winName, Mat& input);
 
 	Mat GetCaptureImage();
 
@@ -90,3 +95,4 @@ private:
 	int w, h;
 	PBYTE pCapBuffer;
 };
+
